@@ -5,19 +5,11 @@
 <br>
 <h1>Endpoints</h1>
 <hr>
+
 <ul>
-  <li>Players</li>
-  <ul>
-    <li>/api/players</li>
-    <li>/api/players/id/[playerID]</li>
-    <li>/api/players/name/[playername]</li>
-  </ul>
-  <li>Plate Appearances</li>
-  <ul>
-    <li>/api/plateappearances</li>
-    <li>/api/plateappearances/[league]</li>
-    <li>/api/plateappearances/pitching/[league]/[playerid]</li>
-    <li>/api/plateappearances/batting/[league]/[playerid]</li>
-  </ul>
+  {% for endpoint in endpoints %}
+    <li>{{ endpoint }}</li>
+  {% endfor %}
 </ul>
+
 {% endblock %}

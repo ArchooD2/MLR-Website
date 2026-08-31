@@ -80,6 +80,22 @@ class PlateAppearnacesByLeague(Resource):
     def get(self, league):
         return PlateAppearance.query.filter_by(league=league).all()
 
+class PlateAppearancesByGame(Resource):
+    @marshal_with(pa_resource_fields)
+    def get(self, league, game_id):
+        return (
+            PlateAppearance.query
+            .filter_by(
+                league=league,
+                gameID=game_id
+            )
+            .order_by(
+                PlateAppearance.inningID,
+                PlateAppearance.playNumber,
+                PlateAppearance.paID
+            )
+            .all()
+        )
 
 class AllPlayers(Resource):
     @marshal_with(player_resource_fields)
@@ -103,6 +119,7 @@ def add_resources(api):
     api.add_resource(PitcherData, '/api/plateappearances/pitching/<string:league>/<int:player_id>')
     api.add_resource(HitterData, '/api/plateappearances/batting/<string:league>/<int:player_id>')
     api.add_resource(AllPlateAppearances, '/api/plateappearances')
+    api.add_resource(PlateAppearancesByGame, '/api/plateappearances/game/<string:league>/<int:game_id>')
     api.add_resource(PlateAppearnacesByLeague, '/api/plateappearances/<string:league>')
     api.add_resource(AllPlayers, '/api/players')
     api.add_resource(PlayerID, '/api/players/id/<int:playerID>')

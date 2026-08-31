@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, flash
+from flask import Blueprint, render_template, request, flash, current_app
 from .models import GameData, TeamData, Parks, Player, PlateAppearance, BattingTypes, PitchingTypes, HandBonus, SeasonData
 from .calculator import calculate_diff, calculate_ranges, calculate_result, calculate_hitting_stats, calculate_pitching_stats
 
@@ -393,6 +393,31 @@ def teams():
     return render_template('teams.html', ale=ale, alc=alc, alw=alw, nle=nle, nlc=nlc, nlw=nlw, ind=ind, dia=dia, twi=twi, wld=wld)
 
 
-@views.route('/api')
-def api():
-    return render_template('api.html')
+
+@views.route("/api")
+def api_page():
+    endpoints = []
+
+    for rule in current_app.url_map.iter_rules():
+        if rule.rule.startswith("/api/"):
+            endpoint = rule.rule
+
+            endpoint = endpoint.replace(
+                "<string:",
+                "["
+            ).replace(
+                "<int:",
+                "["
+            ).replace(
+                ">",
+                "]"
+            )
+
+            endpoints.append(endpoint)
+
+    endpoints.sort()
+
+    return render_template(
+        "api.html",
+        endpoints=endpoints
+    )
